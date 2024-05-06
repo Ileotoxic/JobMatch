@@ -49,19 +49,21 @@ namespace BookShop.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Apply(ApplicationModel model)
         {
-            var job = new ApplicationModel
+            var applications = new ApplicationModel
             {
-                JobListingId= model.JobListingId,
-                Message = model.Message,
+                ApplicationId = Guid.NewGuid().ToString(),
                 Description = model.Description,
+                JobListingId = model.JobListingId,
+                Message = model.Message,
+                status = null,
+                ImageUrl = model.ImageUrl,
             };
-
             //var displayOrder = _context.ApplicationModels.Where(a => a.JobListingId == 1).Count();
-
-            _context.Add(job);
+            _context.Add(applications);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Customer")]
         public IActionResult Edit(string id)
         {
             var job = _context.JobListingModels.FirstOrDefault(j => j.JobListingId == id);
@@ -74,6 +76,7 @@ namespace BookShop.Areas.Customer.Controllers
             return View(job);
         }
         [HttpPost]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Edit(int id, JobListingModel model)
         {
             var job = await _context.JobListingModels.FindAsync(id);

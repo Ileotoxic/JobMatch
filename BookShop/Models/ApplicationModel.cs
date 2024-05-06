@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookShop.Models
 {
@@ -19,5 +20,6 @@ namespace BookShop.Models
 
         public bool? status { get; set; }
 
+        public string? ImageUrl { get; set; }
     }
 }

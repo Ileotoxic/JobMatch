@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BookShop.Areas.Employer.Controllers
 {
     [Area("Employer")]
-    [Authorize(Roles = "Employer")]
+    [Authorize(Roles = "Employer,Admin")]
 
     public class JobListingsController : Controller
     {
@@ -20,16 +20,17 @@ namespace BookShop.Areas.Employer.Controllers
 
         // GET: JobListingModels
         [Area("Employer")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer,Admin")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.JobListingModels.ToListAsync());
+            var ApplicationDbContext = await _context.JobListingModels.Include(j => j.Category).ToListAsync();
+            return View(ApplicationDbContext);
         }
 
 
         // GET: JobListingModels/Details/5
         [Area("Employer")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer,Admin")]
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
@@ -62,7 +63,7 @@ namespace BookShop.Areas.Employer.Controllers
         [ValidateAntiForgeryToken]
         [Area("Employer")]
         [Authorize(Roles = "Employer")]
-        public async Task<IActionResult> Create([Bind("Title,Description,ApplicationDeadline,Location,CategoryId")] JobListingModel model)
+        public async Task<IActionResult> Create([Bind("Title,Description,ApplicationDeadline,Location,CategoryId,Name")] JobListingModel model)
         {
             var jobListing = new JobListingModel
             {
@@ -135,7 +136,7 @@ namespace BookShop.Areas.Employer.Controllers
 
         // GET: JobListingModels/Delete/5
         [Area("Employer")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer,Admin")]
         public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
@@ -144,6 +145,7 @@ namespace BookShop.Areas.Employer.Controllers
             }
 
             var jobListingModel = await _context.JobListingModels
+                .Include(j => j.Category)
                 .FirstOrDefaultAsync(m => m.JobListingId == id);
             if (jobListingModel == null)
             {
@@ -157,8 +159,8 @@ namespace BookShop.Areas.Employer.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Area("Employer")]
-        [Authorize(Roles = "Employer")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "Employer,Admin")]
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var jobListingModel = await _context.JobListingModels.FindAsync(id);
             if (jobListingModel != null)

@@ -2,7 +2,11 @@
 
 @{
     ViewData["Title"] = "Details";
-    var status = @Model.status == true ? "Accepted" : "Denied";
+    var status = (string?)null;
+    if (@Model.status != null)
+    {
+         status = @Model.status == true ? "Accepted" : "Denied";
+    }
 }
 
 <h1>Details</h1>
@@ -38,10 +42,14 @@
     </dl>
 </div>
 <div>
-    @if (Model.status == null)
+    @if (User.IsInRole("Employer"))
     {
-       <a href="/Employer/Applications/Approve/?status=true&id=@Model.ApplicationId">Approve  |</a>
-       <a href = "/Employer/Applications/Approve/?status=false&id=@Model.ApplicationId">  Deny  |</a> 
+        @if (Model.status == null)
+        {
+            <a href="/Employer/Applications/Approve/?status=true&id=@Model.ApplicationId">Approve  |</a>
+            <a href = "/Employer/Applications/Approve/?status=false&id=@Model.ApplicationId">  Deny  |</a>
+        }
+
     }
     <a asp-action="Index">Back to List</a>          
 </div>

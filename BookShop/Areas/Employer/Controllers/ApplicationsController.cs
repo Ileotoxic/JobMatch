@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BookShop.Areas.Employer.Controllers
 {
     [Area("Employer")]
-    [Authorize(Roles = "Employer,Customer")]
+    [Authorize(Roles = "Employer,Customer,Admin")]
     public class ApplicationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +20,7 @@ namespace BookShop.Areas.Employer.Controllers
         }
 
         // GET: ApplicationModels
-        [Authorize(Roles = "Employer,Customer")]
+        [Authorize(Roles = "Employer,Customer,Admin")]
         public async Task<IActionResult> Index()
         {
             //var applications = await _context.ApplicationModels.Where(a => a.status == null).ToListAsync();
@@ -29,7 +29,7 @@ namespace BookShop.Areas.Employer.Controllers
         }
 
         // GET: ApplicationModels/Details/5
-        [Authorize(Roles = "Employer,Customer")]
+        [Authorize(Roles = "Employer,Customer,Admin")]
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
@@ -57,19 +57,21 @@ namespace BookShop.Areas.Employer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employer,Customer")]
-        public async Task<IActionResult> Create([Bind("ApplicationId,JobListingId,Message,Description,DisplayOrder")] ApplicationModel applicationModel)
+        public async Task<IActionResult> Create([Bind("ApplicationId,JobListingId,Message,Description")] ApplicationModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(applicationModel);
+                var applications = new ApplicationModel { 
+                    ApplicationId = Guid.NewGuid().ToString(), 
+                    Description = model.Description,
+                    JobListingId = model.JobListingId,
+                    Message  = model.Message,
+                };
+                _context.Add(applications);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(applicationModel);
         }
 
         // GET: ApplicationModels/Edit/5
-        [Authorize(Roles = "Employer,Customer")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -88,7 +90,7 @@ namespace BookShop.Areas.Employer.Controllers
         // POST: ApplicationModels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employer,Customer")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> Edit(string id, [Bind("ApplicationId,JobListingId,Message,Description,DisplayOrder")] ApplicationModel applicationModel)
         {
             if (id != applicationModel.ApplicationId)
@@ -120,7 +122,7 @@ namespace BookShop.Areas.Employer.Controllers
         }
 
         // GET: ApplicationModels/Delete/5
-        [Authorize(Roles = "Employer,Customer")]
+        [Authorize(Roles = "Employer,Admin")]
         public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
@@ -140,8 +142,8 @@ namespace BookShop.Areas.Employer.Controllers
         // POST: ApplicationModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employer,Customer")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [Authorize(Roles = "Employer,Admin")]
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var applicationModel = await _context.ApplicationModels.FindAsync(id);
             if (applicationModel != null)

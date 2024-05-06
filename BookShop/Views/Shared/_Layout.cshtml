@@ -27,27 +27,31 @@
                             <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Home" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
-                        @if (User.IsInRole("Employer"))
+                        @if (User.IsInRole("Employer") || User.IsInRole("Customer") || User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Employer" asp-controller="Applications" asp-action="Index">Applications</a>
                             </li>
+                            
+                           
+                        }
+                        @if (User.IsInRole("Employer") || User.IsInRole("Admin"))
+                        {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Employer" asp-controller="JobListings" asp-action="Index">Jobs</a>
+                                <a class="nav-link" asp-area="Employer" asp-controller="JobListings" asp-action="Index">JobsCreate</a>
                             </li>
                         }
-                         @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">AccountManage</a>
                             </li>
                         }
-                        @if (User.IsInRole("Customer"))
+                        @if (User.IsInRole("Customer") || User.IsInRole("Admin"))
                         {
-                            
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Customer" asp-controller="Customer" asp-action="Index">Jobs</a>
-                            </li>  
+                                <a class="nav-link" asp-area="Customer" asp-controller="Customer" asp-action="Index">JobList</a>
+                            </li>
 
                         }
                        
