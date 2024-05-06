@@ -40,11 +40,17 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Employer" asp-controller="JobListings" asp-action="Index">JobsCreate</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                            </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">AccountManage</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="CategoryRequest">CategoryRequest</a>
                             </li>
                         }
                         @if (User.IsInRole("Customer") || User.IsInRole("Admin"))
@@ -52,6 +58,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="Customer" asp-controller="Customer" asp-action="Index">JobList</a>
                             </li>
+                           
 
                         }
                        

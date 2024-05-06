@@ -96,7 +96,7 @@ namespace BookShop.Areas.Admin.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Email,Password,Address,City,Id,Role")] ApplicationUser user,string role)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,Email,Password,Address,City,Id,Role,Password")] ApplicationUser user,string role)
         {
             if (id != user.Id)
             {
@@ -107,14 +107,20 @@ namespace BookShop.Areas.Admin.Controllers
             {
                 try
                 {
-                    var existingUser = await _userManager.FindByIdAsync(id);
+                    ApplicationUser existingUser = await _userManager.FindByIdAsync(id);
                     existingUser.Name = user.Name;
                     existingUser.Email = user.Email;
                     existingUser.Address = user.Address;
                     existingUser.City = user.City;
+                    if (user.Password != null)
+                    {
+                        PasswordHasher<ApplicationUser> hasher = new PasswordHasher<ApplicationUser>();
+                        existingUser.PasswordHash = hasher.HashPassword(existingUser, user.Password);
+                    }
 
-                    var updateResult = await _userManager.UpdateAsync(existingUser);
-                    if (updateResult.Succeeded)
+                    var updateResult =  _context.Update(existingUser);
+                    _context.SaveChanges();
+                    if (updateResult != null)
                     {
                         var roles = await _userManager.GetRolesAsync(user);
                         var fuser = await _userManager.FindByIdAsync(id);
@@ -125,11 +131,6 @@ namespace BookShop.Areas.Admin.Controllers
                         }
                         
                         return RedirectToAction(nameof(Index));
-                    }
-
-                    foreach (var error in updateResult.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
                 catch (DbUpdateConcurrencyException)

@@ -44,10 +44,10 @@ namespace BookShop.Data
 
             // Seed initial data
             modelBuilder.Entity<Category>().HasData(
-                new Category { CategoryId = "1", Name = "Back-End Developer", Description = "A Back End Developer is responsible for server-side application logic and integration of the work front-end developers do." },
-                new Category { CategoryId = "2", Name = "Front-End Developer", Description = "A Front End Developer is focused on the user interface and user experience of a website or application." },
-                new Category { CategoryId = "3", Name = "Full Stack Developer", Description = "A Full Stack Developer is capable of working on both the front-end and back-end portions of an application." },
-                new Category { CategoryId = "4", Name = "Mobile Apps Developer", Description = "A Mobile Apps Developer is specialized in creating applications for mobile devices, such as smartphones and tablets." }
+                new Category { CategoryId = "1", Name = "Back-End Developer", Description = "A Back End Developer is responsible for server-side application logic and integration of the work front-end developers do." , Status = true},
+                new Category { CategoryId = "2", Name = "Front-End Developer", Description = "A Front End Developer is focused on the user interface and user experience of a website or application.", Status = true },
+                new Category { CategoryId = "3", Name = "Full Stack Developer", Description = "A Full Stack Developer is capable of working on both the front-end and back-end portions of an application.", Status = true },
+                new Category { CategoryId = "4", Name = "Mobile Apps Developer", Description = "A Mobile Apps Developer is specialized in creating applications for mobile devices, such as smartphones and tablets.", Status = true }
             );
 
             modelBuilder.Entity<JobListingModel>().HasData(

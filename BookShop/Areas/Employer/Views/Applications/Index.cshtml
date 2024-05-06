@@ -6,15 +6,9 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.JobListingId)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Message)
             </th>
@@ -28,19 +22,18 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.JobListingId)</td>
                 <td>@Html.DisplayFor(modelItem => item.Message)</td>
                 <td>@Html.DisplayFor(modelItem => item.Description)</td>
                 <td>
-                    @if (User.IsInRole("Customer"))
+                    @if (User.IsInRole("Employer"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.ApplicationId">Edit</a>
+                        
                         <a asp-action="Details" asp-route-id="@item.ApplicationId">Details</a>
                     }
 
                     @if (User.IsInRole("Admin"))
                     {
-
+                        <a asp-action="Edit" asp-route-id="@item.ApplicationId">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.ApplicationId">Delete</a>
                     }
                 </td>

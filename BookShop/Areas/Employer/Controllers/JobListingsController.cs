@@ -3,6 +3,7 @@ using BookShop.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BookShop.Areas.Employer.Controllers
 {
@@ -52,7 +53,7 @@ namespace BookShop.Areas.Employer.Controllers
         // GET: JobListingModels/Create
         public IActionResult Create()
         {
-            ViewData["categoryNames"] =  _context.Categories.ToList();
+            ViewData["categoryNames"] =  _context.Categories.Where(c=>c.Status !=null).ToList();
             return View();
         }
 
